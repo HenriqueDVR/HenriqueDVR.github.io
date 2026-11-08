@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Henrique Rodrigues — Game Programmer</title>
-<meta name="description" content="Henrique Rodrigues, game programmer. VR stealth, roguelite FPS, co-op puzzle-platformers, a dungeon crawler that fits on a floppy disk, plus the odd web tool.">
+<meta name="description" content="Henrique Rodrigues is a game programmer from Leiria, Portugal. A VR stealth game, a roguelite shooter, a co-op puzzle game, and Floppy Dungeon, which won the NEXT STAGE Special Award at the 1.44MB Game Development Contest.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,300;12..96,500;12..96,700;12..96,800&family=Instrument+Sans:ital,wght@0,400;0,500;0,600;1,400&family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
@@ -22,6 +22,8 @@
     --violet: #9d8cff;
     --sky: #6fb8ff;
     --steel: #c8d2dd;
+    --gold: #f3c76b;
+    --rose: #ff8fbf;
     --line: rgba(236, 232, 221, 0.08);
     --display: "Bricolage Grotesque", system-ui, sans-serif;
     --body: "Instrument Sans", system-ui, sans-serif;
@@ -112,10 +114,25 @@
     transition: opacity 0.2s;
   }
   .bar nav a:hover { opacity: 1; }
+  /* once the page scrolls, the bar gets its own backing so it never sits on top of text */
+  .bar.scrolled {
+    mix-blend-mode: normal;
+    background: rgba(6, 7, 13, 0.8);
+    -webkit-backdrop-filter: blur(12px);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--line);
+  }
   @media (max-width: 680px) { .bar nav { gap: 0.95rem; } .bar nav a { font-size: 0.62rem; letter-spacing: 0.1em; } }
 
   /* ============ hero ============ */
+  /* --rc is the colour of whatever the reel is showing; it tints the glow around it */
+  @property --rc {
+    syntax: "<color>";
+    inherits: true;
+    initial-value: #9d8cff;
+  }
   .hero {
+    --rc: var(--violet);
     position: relative;
     min-height: 100svh;
     display: flex;
@@ -123,39 +140,22 @@
     justify-content: center;
     overflow: hidden;
     background:
-      radial-gradient(ellipse 80% 55% at 18% 10%, rgba(157, 140, 255, 0.07), transparent 62%),
-      radial-gradient(ellipse 90% 60% at 88% 90%, rgba(141, 240, 214, 0.055), transparent 62%),
+      radial-gradient(ellipse 55% 60% at 72% 48%, color-mix(in srgb, var(--rc) 11%, transparent), transparent 70%),
+      radial-gradient(ellipse 80% 55% at 12% 8%, rgba(157, 140, 255, 0.05), transparent 62%),
       var(--bg);
+    transition: --rc 0.9s ease;
   }
-  /* code field — always on, no torch needed */
-  .glyphs {
-    position: absolute;
-    inset: 0;
-    z-index: 1;
-    color: var(--bone);
-    opacity: 0.085;
-    pointer-events: none;
-  }
-  .glyphs span {
-    position: absolute;
-    font-family: var(--mono);
-    font-size: 0.72rem;
-    letter-spacing: 0.1em;
-    white-space: nowrap;
-    animation: drift 26s ease-in-out infinite alternate;
-  }
-  @keyframes drift {
-    from { transform: translate3d(0, 0, 0); }
-    to   { transform: translate3d(14px, -18px, 0); }
-  }
-
-  #motes { position: absolute; inset: 0; z-index: 2; pointer-events: none; }
-
   .hero-inner {
     position: relative;
     z-index: 3;
-    padding: 0 clamp(1.4rem, 7vw, 7rem);
     width: 100%;
+    max-width: 1560px;
+    margin: 0 auto;
+    padding: 6.5rem clamp(1.4rem, 5vw, 4rem) 5.5rem;
+    display: grid;
+    grid-template-columns: minmax(0, 0.85fr) minmax(0, 1.25fr);
+    gap: clamp(2rem, 4.5vw, 4.5rem);
+    align-items: center;
   }
   .hero-eyebrow {
     font-family: var(--mono);
@@ -163,7 +163,7 @@
     letter-spacing: 0.34em;
     text-transform: uppercase;
     color: var(--lumen);
-    margin-bottom: 2rem;
+    margin-bottom: 1.6rem;
     display: flex;
     align-items: center;
     gap: 1rem;
@@ -177,7 +177,7 @@
   .hero h1 {
     font-family: var(--display);
     font-weight: 800;
-    font-size: clamp(3rem, 11.5vw, 9.5rem);
+    font-size: clamp(2.8rem, 6.2vw, 6.6rem);
     line-height: 0.94;
     letter-spacing: -0.025em;
     text-transform: uppercase;
@@ -191,21 +191,21 @@
   .hero h1 .row:nth-child(2) > span { animation-delay: 0.12s; }
   .hero h1 .row.ghost > span {
     color: transparent;
-    -webkit-text-stroke: 1px rgba(236, 232, 221, 0.35);
+    -webkit-text-stroke: 1px rgba(236, 232, 221, 0.46);
   }
   @keyframes rise { to { transform: translateY(0); } }
 
   /* rotating genre line — the range, stated up front */
   .rotline {
-    margin-top: 1.6rem;
+    margin-top: 1.4rem;
     font-family: var(--display);
     font-weight: 500;
-    font-size: clamp(1.1rem, 3.2vw, 2rem);
+    font-size: clamp(1.1rem, 2.1vw, 1.7rem);
     letter-spacing: -0.01em;
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
-    gap: 0.6rem;
+    gap: 0.5rem;
     min-height: 2.4em;
   }
   .rotline .lead { color: var(--dim); }
@@ -230,9 +230,8 @@
     display: flex;
     flex-wrap: wrap;
     align-items: baseline;
-    gap: 1rem 3rem;
-    margin-top: 1.8rem;
-    max-width: 62rem;
+    gap: 0.5rem 1.6rem;
+    margin-top: 1.1rem;
   }
   .hero-sub .role {
     font-family: var(--mono);
@@ -242,13 +241,156 @@
     color: var(--ember);
     white-space: nowrap;
   }
-  .hero-sub .pitch {
-    color: var(--dim);
-    font-size: clamp(0.98rem, 1.6vw, 1.12rem);
-    max-width: 36em;
-    flex: 1 1 22rem;
+  .hero-sub .pitch { color: var(--dim); font-size: clamp(0.98rem, 1.3vw, 1.08rem); }
+
+  .hero-actions { display: flex; flex-wrap: wrap; gap: 0.6rem; margin-top: 2rem; }
+  .btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    font-family: var(--mono);
+    font-size: 0.76rem;
+    letter-spacing: 0.04em;
+    color: var(--bone);
+    text-decoration: none;
+    background: rgba(236, 232, 221, 0.04);
+    border: 1px solid rgba(236, 232, 221, 0.18);
+    border-radius: 4px;
+    padding: 0.72rem 1.1rem;
+    cursor: pointer;
+    transition: background 0.2s, border-color 0.2s, transform 0.15s;
   }
-  .hero-sub .pitch em { font-style: italic; color: var(--bone); }
+  .btn:hover { border-color: rgba(236, 232, 221, 0.45); background: rgba(236, 232, 221, 0.08); }
+  .btn:active { transform: translateY(1px); }
+  .btn.primary { color: var(--bg); background: var(--ember); border-color: var(--ember); font-weight: 700; }
+  .btn.primary:hover { background: #ffb866; border-color: #ffb866; }
+  .btn-play::before {
+    content: "";
+    border-left: 0.55em solid currentColor;
+    border-top: 0.34em solid transparent;
+    border-bottom: 0.34em solid transparent;
+  }
+
+  .hero-award {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.6rem;
+    margin-top: 1.8rem;
+    color: var(--gold);
+    text-decoration: none;
+    font-size: clamp(0.92rem, 1.3vw, 1rem);
+    line-height: 1.4;
+  }
+  .hero-award .laurel { width: 13px; height: 33px; flex: none; }
+  .hero-award span { border-bottom: 1px solid rgba(243, 199, 107, 0.3); transition: border-color 0.2s; }
+  .hero-award:hover span { border-bottom-color: var(--gold); }
+
+  /* ---------- the reel ---------- */
+  .reel {
+    position: relative;
+    margin: 0;
+    aspect-ratio: 16 / 9;
+    border-radius: 10px;
+    overflow: hidden;
+    background: #05060b;
+    border: 1px solid rgba(236, 232, 221, 0.1);
+    box-shadow:
+      0 40px 90px -40px rgba(0, 0, 0, 0.9),
+      0 0 90px -30px color-mix(in srgb, var(--rc) 60%, transparent);
+  }
+  .reel video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+  .reel::after {
+    content: "";
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 48%;
+    background: linear-gradient(to bottom, transparent, rgba(4, 5, 10, 0.82));
+    pointer-events: none;
+  }
+  .reel-open { position: absolute; inset: 0; z-index: 1; padding: 0; border: 0; background: none; cursor: zoom-in; }
+  .reel-cap {
+    position: absolute;
+    left: 1.3rem;
+    right: 4.5rem;
+    bottom: 1.6rem;
+    z-index: 2;
+    display: grid;
+    justify-items: start;
+    gap: 0.1rem;
+    pointer-events: none;
+    transition: opacity 0.22s ease, transform 0.22s ease;
+  }
+  .reel-cap.swap { opacity: 0; transform: translateY(5px); }
+  .reel-title {
+    pointer-events: auto;
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(1rem, 1.45vw, 1.3rem);
+    letter-spacing: -0.01em;
+    color: var(--bone);
+    text-decoration: none;
+  }
+  .reel-title:hover { text-decoration: underline; text-decoration-color: var(--rc); text-underline-offset: 4px; }
+  .reel-text { font-size: clamp(0.8rem, 1vw, 0.92rem); line-height: 1.4; color: rgba(236, 232, 221, 0.8); }
+  .reel-tech {
+    font-family: var(--mono);
+    font-size: 0.62rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--rc);
+    margin-top: 0.35rem;
+  }
+  .reel-bar { position: absolute; left: 0; right: 0; bottom: 0; z-index: 3; display: flex; gap: 3px; height: 12px; }
+  .reel-bar button { flex: var(--d, 1) 1 0; position: relative; padding: 0; border: 0; background: none; cursor: pointer; }
+  .reel-bar button::before, .reel-bar button::after {
+    content: "";
+    position: absolute;
+    left: 0; right: 0; bottom: 0;
+    height: 3px;
+    transition: height 0.15s ease;
+  }
+  .reel-bar button::before { background: rgba(236, 232, 221, 0.2); }
+  .reel-bar button::after { background: var(--c); transform-origin: 0 50%; transform: scaleX(var(--p, 0)); }
+  .reel-bar button:hover::before, .reel-bar button:hover::after,
+  .reel-bar button:focus-visible::before, .reel-bar button:focus-visible::after { height: 6px; }
+  .reel-toggle {
+    position: absolute;
+    top: 0.75rem;
+    right: 0.75rem;
+    z-index: 3;
+    width: 2.2rem;
+    height: 2.2rem;
+    display: grid;
+    place-items: center;
+    border-radius: 50%;
+    border: 1px solid rgba(236, 232, 221, 0.22);
+    background: rgba(5, 6, 11, 0.55);
+    color: var(--bone);
+    cursor: pointer;
+    opacity: 0.75;
+    transition: opacity 0.2s, background 0.2s;
+  }
+  .reel-toggle:hover, .reel-toggle:focus-visible { opacity: 1; background: rgba(5, 6, 11, 0.85); }
+  .reel-toggle svg { width: 0.75rem; height: 0.75rem; fill: currentColor; }
+  .reel-toggle .i-play, .reel.paused .reel-toggle .i-pause { display: none; }
+  .reel.paused .reel-toggle .i-play { display: block; }
+
+  @media (max-width: 1280px) { .hero-eyebrow { letter-spacing: 0.2em; gap: 0.7rem; } }
+  @media (max-width: 899px) {
+    .hero-inner { grid-template-columns: minmax(0, 1fr); padding-top: 5.5rem; padding-bottom: 4rem; }
+    .hero h1 { font-size: clamp(2.8rem, 11vw, 6.6rem); }
+    .scroll-cue { display: none; }
+  }
+  @media (max-width: 760px) {
+    .rotline { min-height: 3.6em; }
+    .hero-eyebrow::before { display: none; }
+    .reel { border-radius: 6px; }
+    .reel-cap { left: 0.9rem; right: 3.2rem; bottom: 1.2rem; }
+  }
+
+  .laurel { display: block; color: var(--gold); overflow: visible; }
+  .laurel.flip { transform: scaleX(-1); }
+
   .scroll-cue {
     position: absolute;
     bottom: 2rem;
@@ -298,51 +440,74 @@
 
   /* ============ work list ============ */
   .work { background: linear-gradient(var(--bg), #080a14 40%, var(--bg-2)); }
+  .sect > * { max-width: 1320px; margin-left: auto; margin-right: auto; }
   .dig {
     position: relative;
+    isolation: isolate;
     display: grid;
-    grid-template-columns: minmax(0, 11rem) minmax(0, 1fr);
-    gap: clamp(1.5rem, 4vw, 4rem);
-    padding: clamp(2.6rem, 6vw, 4.5rem) 0;
-    border-top: 1px solid var(--line);
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1.08fr);
+    grid-template-areas: "body media";
+    gap: clamp(2rem, 5vw, 5.5rem);
+    align-items: center;
+    padding: clamp(3.5rem, 8vw, 7rem) 0;
     opacity: 0;
     transform: translateY(28px);
     transition: opacity 0.9s ease, transform 0.9s cubic-bezier(0.22, 1, 0.36, 1);
   }
+  .dig:nth-of-type(even) {
+    grid-template-columns: minmax(0, 1.08fr) minmax(0, 1fr);
+    grid-template-areas: "media body";
+  }
+  /* each game sits on its own full-width band, lit in its colour from the side its picture is on */
+  .dig::before {
+    content: "";
+    position: absolute;
+    z-index: -1;
+    top: 0; bottom: 0;
+    left: 50%;
+    width: 100vw;
+    transform: translateX(-50%);
+    border-top: 1px solid var(--line);
+    background: radial-gradient(ellipse 42% 75% at 74% 50%, color-mix(in srgb, var(--hl) 9%, transparent), transparent 72%);
+  }
+  .dig:nth-of-type(even)::before {
+    background:
+      radial-gradient(ellipse 42% 75% at 26% 50%, color-mix(in srgb, var(--hl) 9%, transparent), transparent 72%),
+      rgba(255, 255, 255, 0.012);
+  }
   .dig.seen { opacity: 1; transform: none; }
-  .dig:last-child { border-bottom: 1px solid var(--line); }
   .dig.vr    { --hl: var(--violet); }
   .dig.fps   { --hl: var(--ember); }
   .dig.coop  { --hl: var(--lumen); }
   .dig.jam   { --hl: var(--sky); }
+  .dig-body { grid-area: body; min-width: 0; }
+  .dig-media { grid-area: media; position: relative; min-width: 0; }
 
   .dig-meta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 0.35rem 1.1rem;
+    margin-bottom: 0.9rem;
     font-family: var(--mono);
-    color: var(--faint);
     font-size: 0.72rem;
     letter-spacing: 0.1em;
-    line-height: 2.1;
+    color: var(--faint);
   }
   .dig-meta .yr {
-    display: block;
     font-family: var(--display);
-    font-weight: 300;
-    font-size: clamp(2rem, 4vw, 3.2rem);
-    letter-spacing: -0.02em;
+    font-weight: 500;
+    font-size: 1.45rem;
+    letter-spacing: -0.01em;
     line-height: 1;
-    color: var(--bone);
-    opacity: 0.28;
-    margin-bottom: 0.7rem;
+    color: var(--hl, var(--bone));
   }
   .dig-meta .genre {
-    display: block;
-    font-family: var(--mono);
     font-weight: 700;
     font-size: 0.7rem;
     letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--hl, var(--lumen));
-    margin-bottom: 0.3rem;
   }
   .dig-meta .status { display: inline-flex; align-items: center; gap: 0.5rem; }
   .dig-meta .status::before {
@@ -358,7 +523,7 @@
   .dig-body h3 {
     font-family: var(--display);
     font-weight: 700;
-    font-size: clamp(1.9rem, 5vw, 3.6rem);
+    font-size: clamp(1.9rem, 4.2vw, 3.3rem);
     line-height: 1.02;
     letter-spacing: -0.02em;
     text-transform: uppercase;
@@ -366,16 +531,6 @@
     transition: color 0.3s;
   }
   .dig:hover .dig-body h3 { color: var(--hl, var(--lumen)); }
-  .dig-body h3 .untitled {
-    display: block;
-    font-family: var(--mono);
-    font-weight: 400;
-    font-size: 0.72rem;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--faint);
-    margin-top: 0.6rem;
-  }
   .dig-tags { display: flex; flex-wrap: wrap; gap: 0.45rem; margin-bottom: 1.5rem; }
   .dig-tags span {
     font-family: var(--mono);
@@ -423,27 +578,237 @@
     font-weight: 700;
   }
   .dig-links a.primary:hover { filter: brightness(1.12); color: var(--bg); }
-  .dig-links .trailer { color: var(--bone); border-color: rgba(236, 232, 221, 0.24); }
-  .dig-links .trailer::before {
-    content: "▶";
-    font-size: 0.62rem;
-    margin-right: 0.5rem;
-    color: var(--hl, var(--lumen));
-  }
-  .dig-links .trailer.pending {
-    color: var(--faint);
-    border-color: var(--line);
-    cursor: default;
-    transform: none;
-  }
-  .dig-links .trailer.pending:hover { color: var(--faint); border-color: var(--line); transform: none; }
-  .dig-links .trailer.pending::before { color: var(--faint); }
 
-  @media (max-width: 760px) {
-    .dig { grid-template-columns: 1fr; gap: 1.2rem; }
-    .dig-meta { display: flex; align-items: baseline; flex-wrap: wrap; gap: 0.4rem 1.2rem; }
-    .dig-meta .yr { margin-bottom: 0; font-size: 1.8rem; }
-    .dig-meta .genre { margin-bottom: 0; }
+  @media (max-width: 1000px) {
+    .dig, .dig:nth-of-type(even) {
+      grid-template-columns: minmax(0, 1fr);
+      grid-template-areas: "media" "body";
+      gap: 1.8rem;
+    }
+  }
+
+  /* ============ media panels (games and other work) ============ */
+  .media {
+    position: relative;
+    margin: 0;
+    aspect-ratio: 16 / 9;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #05060b;
+    border: 1px solid color-mix(in srgb, var(--hl, var(--steel)) 30%, transparent);
+    box-shadow:
+      0 34px 70px -38px rgba(0, 0, 0, 0.9),
+      0 0 70px -30px color-mix(in srgb, var(--hl, var(--steel)) 55%, transparent);
+  }
+  .media img, .media video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
+  .media .crop-top { transform: scale(1.07); transform-origin: 50% 85%; }   /* trims the editor toolbar off the top of the clip */
+  .media-tag {
+    position: absolute;
+    left: 0.8rem;
+    top: 0.8rem;
+    z-index: 2;
+    font-family: var(--mono);
+    font-size: 0.6rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: rgba(236, 232, 221, 0.88);
+    background: rgba(5, 6, 11, 0.66);
+    border-radius: 3px;
+    padding: 0.3rem 0.55rem;
+    pointer-events: none;
+  }
+  .media-play {
+    position: absolute;
+    inset: 0;
+    z-index: 1;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    padding: 1rem;
+    background: none;
+    border: 0;
+    color: var(--bone);
+    cursor: pointer;
+  }
+  .media-play span {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.55rem;
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 0.7rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    background: rgba(5, 6, 11, 0.72);
+    border: 1px solid rgba(236, 232, 221, 0.25);
+    border-radius: 100px;
+    padding: 0.65rem 1.1rem;
+    transition: transform 0.2s, border-color 0.2s, background 0.2s;
+  }
+  .media-play span::before {
+    content: "";
+    border-left: 0.55em solid var(--hl, var(--bone));
+    border-top: 0.35em solid transparent;
+    border-bottom: 0.35em solid transparent;
+  }
+  .media-play:hover span, .media-play:focus-visible span {
+    transform: translateY(-2px);
+    border-color: var(--hl, var(--bone));
+    background: rgba(5, 6, 11, 0.88);
+  }
+
+  /* Floppy Dungeon: real screenshots taking turns; the last one is a close-up of the text cells */
+  .shots img { opacity: 0; animation: shots 16s linear infinite; }
+  .shots img:nth-of-type(1) { animation-delay: -0.6s; }
+  .shots img:nth-of-type(2) { animation-delay: 3.4s; }
+  .shots img:nth-of-type(3) { animation-delay: 7.4s; }
+  .shots img:nth-of-type(4) { animation-delay: 11.4s; image-rendering: pixelated; }
+  @keyframes shots {
+    0% { opacity: 0; }
+    4% { opacity: 1; }
+    25% { opacity: 1; }
+    29% { opacity: 0; }
+    100% { opacity: 0; }
+  }
+
+  /* Into the Dark has no footage here yet: its systems, set as type */
+  .type-poster {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    gap: 0.15rem;
+    padding: clamp(1.4rem, 4vw, 3rem);
+    background:
+      repeating-linear-gradient(to bottom, rgba(255, 169, 77, 0.05) 0 1px, transparent 1px 2.4rem),
+      radial-gradient(ellipse 80% 90% at 15% 20%, rgba(255, 169, 77, 0.15), transparent 70%),
+      #0a0b12;
+  }
+  .type-poster span {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: clamp(1.6rem, 3.4vw, 2.9rem);
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    text-transform: uppercase;
+    color: transparent;
+    -webkit-text-stroke: 1px rgba(255, 169, 77, 0.55);
+  }
+  .type-poster span:nth-child(2) { color: var(--ember); -webkit-text-stroke: 0; }
+
+  /* ============ award badge ============ */
+  .award {
+    --n: 5px;
+    --notch: polygon(
+      0 calc(var(--n) * 2), var(--n) calc(var(--n) * 2), var(--n) var(--n), calc(var(--n) * 2) var(--n), calc(var(--n) * 2) 0,
+      calc(100% - var(--n) * 2) 0, calc(100% - var(--n) * 2) var(--n), calc(100% - var(--n)) var(--n), calc(100% - var(--n)) calc(var(--n) * 2), 100% calc(var(--n) * 2),
+      100% calc(100% - var(--n) * 2), calc(100% - var(--n)) calc(100% - var(--n) * 2), calc(100% - var(--n)) calc(100% - var(--n)), calc(100% - var(--n) * 2) calc(100% - var(--n)), calc(100% - var(--n) * 2) 100%,
+      calc(var(--n) * 2) 100%, calc(var(--n) * 2) calc(100% - var(--n)), var(--n) calc(100% - var(--n)), var(--n) calc(100% - var(--n) * 2), 0 calc(100% - var(--n) * 2)
+    );
+    position: relative;
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 0.75rem;
+    color: var(--bone);
+    text-decoration: none;
+  }
+  .award-seal { position: relative; display: block; }
+  .award-seal::before, .award-seal::after {
+    content: "+";
+    position: absolute;
+    font-family: var(--mono);
+    font-size: 0.8rem;
+    line-height: 1;
+    color: var(--sky);
+    opacity: 0.7;
+  }
+  .award-seal::before { top: -0.9rem; left: -0.9rem; }
+  .award-seal::after { bottom: -0.9rem; right: -0.9rem; }
+  .award-frame {
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1.35rem 1.5rem;
+    background: rgba(111, 184, 255, 0.42);
+    clip-path: var(--notch);
+    transition: background 0.3s;
+  }
+  .award-frame::before {
+    content: "";
+    position: absolute;
+    inset: 1px;
+    background:
+      radial-gradient(ellipse 70% 90% at 50% 0%, rgba(243, 199, 107, 0.09), transparent 70%),
+      #0b0f1e;
+    clip-path: var(--notch);
+  }
+  .award-frame > * { position: relative; }
+  .award .laurel { width: 30px; height: 76px; flex: none; transition: filter 0.3s; }
+  .award-text {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+    line-height: 1.15;
+  }
+  .award-contest {
+    font-family: var(--mono);
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+    color: var(--dim);
+  }
+  .award-title {
+    font-family: var(--display);
+    font-weight: 800;
+    font-size: 1.62rem;
+    letter-spacing: -0.01em;
+    text-transform: uppercase;
+    margin: 0.45rem 0 0.4rem;
+  }
+  .award-org {
+    font-family: var(--mono);
+    font-weight: 700;
+    font-size: 0.76rem;
+    letter-spacing: 0.14em;
+    color: var(--gold);
+  }
+  .award-org [lang="ko"] {
+    font-family: "Apple SD Gothic Neo", "Malgun Gothic", "Noto Sans KR", sans-serif;
+    letter-spacing: 0.06em;
+    margin-left: 0.35em;
+  }
+  .award-note {
+    font-family: var(--mono);
+    font-size: 0.66rem;
+    color: var(--faint);
+    transition: color 0.2s;
+  }
+  .award:hover .award-frame { background: rgba(111, 184, 255, 0.8); }
+  .award:hover .laurel { filter: drop-shadow(0 0 6px rgba(243, 199, 107, 0.45)); }
+  .award:hover .award-note { color: var(--dim); }
+
+  /* pinned to the corner of the game's picture, like festival laurels on a poster */
+  .dig-media > .award {
+    position: absolute;
+    left: -1.6rem;
+    bottom: -2.6rem;
+    z-index: 3;
+    transform: scale(0.86);
+    transform-origin: 0 100%;
+  }
+  .dig-media > .award .award-seal { filter: drop-shadow(0 16px 28px rgba(0, 0, 0, 0.6)); }   /* the frame's clip-path would cut a box-shadow off */
+  @media (max-width: 480px) { .award-title { font-size: 1.3rem; } }
+  @media (max-width: 1000px) {
+    .dig-media > .award {
+      position: relative;
+      left: auto;
+      bottom: auto;
+      transform: none;
+      display: flex;
+      width: fit-content;
+      margin: 2.2rem auto 0;
+    }
   }
 
   /* ============ trailer lightbox ============ */
@@ -516,139 +881,185 @@
   }
   .lb-close:hover { border-color: var(--ember); }
 
-  /* ============ tools strip ============ */
-  .strip {
-    border-top: 1px solid var(--line);
-    border-bottom: 1px solid var(--line);
-    padding: 1.1rem 0;
-    overflow: hidden;
-    background: var(--bg);
-  }
-  .strip .belt { display: flex; gap: 3.5rem; width: max-content; animation: belt 36s linear infinite; }
-  .strip:hover .belt { animation-play-state: paused; }
-  @keyframes belt { to { transform: translateX(-50%); } }
-  .strip .belt span {
+  /* ============ other work ============ */
+  .side { background: var(--bg-2); }
+  .sub-head {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
     font-family: var(--mono);
-    font-size: 0.78rem;
+    font-size: 0.7rem;
     letter-spacing: 0.22em;
     text-transform: uppercase;
     color: var(--dim);
-    white-space: nowrap;
-    display: inline-flex;
-    align-items: center;
-    gap: 3.5rem;
+    margin-bottom: 1.8rem;
   }
-  .strip .belt span::after { content: "✦"; color: var(--ember); font-size: 0.6rem; }
-
-  /* ============ side projects ============ */
-  .side { background: var(--bg-2); }
-  .side-grid {
+  .sub-head::after { content: ""; flex: 1; height: 1px; background: var(--line); }
+  .feat-list { display: grid; gap: clamp(3rem, 7vw, 5rem); margin-bottom: clamp(4.5rem, 10vw, 7rem); }
+  .feat {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(19rem, 1fr));
-    gap: 1px;
-    background: var(--line);
-    border: 1px solid var(--line);
+    grid-template-columns: minmax(0, 1.1fr) minmax(0, 1fr);
+    gap: clamp(1.8rem, 4.5vw, 4.5rem);
+    align-items: center;
   }
-  .side-card {
-    background: var(--bg-2);
-    padding: clamp(1.6rem, 3.5vw, 2.4rem);
-    transition: background 0.35s;
+  .feat.glt { --hl: var(--lumen); }
+  .feat.oc2 { --hl: var(--rose); }
+  .feat:nth-child(even) .feat-media { order: 2; }
+  .feat h3 {
+    font-family: var(--display);
+    font-weight: 700;
+    font-size: clamp(1.6rem, 3.2vw, 2.5rem);
+    line-height: 1.05;
+    letter-spacing: -0.015em;
+    margin-bottom: 0.9rem;
   }
-  .side-card:hover { background: var(--panel); }
-  .side-card .kind {
+  .feat .desc { color: var(--dim); max-width: 56ch; margin-bottom: 1rem; }
+  .feat .dig-tags { margin: 1.3rem 0 0; }
+  .feat .dig-links { margin-top: 1.4rem; }
+  @media (max-width: 1000px) {
+    .feat { grid-template-columns: minmax(0, 1fr); }
+    .feat:nth-child(even) .feat-media { order: 0; }
+  }
+
+  .tools { list-style: none; border-top: 1px solid var(--line); }
+  .tools li {
+    display: grid;
+    grid-template-columns: minmax(0, 17rem) minmax(0, 1fr) auto;
+    gap: 0.5rem clamp(1.5rem, 4vw, 3.5rem);
+    align-items: baseline;
+    padding: 1.7rem 0;
+    border-bottom: 1px solid var(--line);
+  }
+  .tools .kind {
+    display: block;
     font-family: var(--mono);
-    font-size: 0.66rem;
-    letter-spacing: 0.18em;
+    font-size: 0.62rem;
+    letter-spacing: 0.16em;
     text-transform: uppercase;
     color: var(--steel);
     opacity: 0.75;
+    margin-bottom: 0.35rem;
   }
-  .side-card h3 {
+  .tools h3 {
     font-family: var(--display);
     font-weight: 700;
-    font-size: clamp(1.3rem, 3vw, 1.8rem);
+    font-size: clamp(1.15rem, 2vw, 1.45rem);
     letter-spacing: -0.01em;
-    margin: 0.6rem 0 0.7rem;
+    line-height: 1.15;
   }
-  .side-card p { color: var(--dim); font-size: 0.95rem; max-width: 46ch; }
-  .side-card .dig-links { margin-top: 1.3rem; }
-  .side-card .dig-links a { --hl: var(--steel); }
-
-  /* ============ craft ============ */
-  .creed { background: var(--bg); }
-  .creed-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(15rem, 1fr));
-    gap: 1px;
-    background: var(--line);
-    border: 1px solid var(--line);
-  }
-  .creed-cell { background: var(--bg); padding: clamp(1.6rem, 3.5vw, 2.6rem); transition: background 0.35s; }
-  .creed-cell:hover { background: var(--panel); }
-  .creed-cell .rune {
+  .tools p { color: var(--dim); font-size: 0.95rem; max-width: 64ch; }
+  .tools .go {
     font-family: var(--mono);
-    color: var(--ember);
-    font-size: 1.15rem;
-    display: block;
-    margin-bottom: 1.1rem;
+    font-size: 0.74rem;
+    color: var(--bone);
+    text-decoration: none;
+    white-space: nowrap;
+    border: 1px solid rgba(236, 232, 221, 0.2);
+    border-radius: 3px;
+    padding: 0.45rem 0.9rem;
+    transition: border-color 0.2s, transform 0.2s;
   }
-  .creed-cell h3 {
-    font-family: var(--display);
-    font-weight: 700;
-    font-size: 1.12rem;
-    letter-spacing: 0.01em;
-    margin-bottom: 0.55rem;
+  .tools .go:hover { border-color: var(--steel); transform: translateY(-2px); }
+  @media (max-width: 860px) {
+    .tools li { grid-template-columns: minmax(0, 1fr); }
+    .tools .go { justify-self: start; margin-top: 0.5rem; }
   }
-  .creed-cell p { color: var(--dim); font-size: 0.94rem; }
-
 
   /* ============ contact ============ */
   .outro {
     position: relative;
-    text-align: center;
-    padding-top: clamp(6rem, 14vw, 11rem);
-    padding-bottom: clamp(5rem, 10vw, 8rem);
+    padding: clamp(5rem, 12vw, 9rem) clamp(1.4rem, 7vw, 7rem);
     background:
-      radial-gradient(ellipse 75% 55% at 50% 0%, rgba(255, 169, 77, 0.1), transparent 65%),
+      radial-gradient(ellipse 50% 70% at 78% 55%, rgba(255, 169, 77, 0.11), transparent 70%),
+      radial-gradient(ellipse 60% 60% at 8% 100%, rgba(157, 140, 255, 0.05), transparent 70%),
       var(--bg-2);
+    border-top: 1px solid var(--line);
     overflow: hidden;
   }
-  .outro .eyebrow {
+  .outro-inner {
+    max-width: 1320px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: minmax(0, 1.25fr) minmax(0, 1fr);
+    gap: clamp(2.2rem, 6vw, 6rem);
+    align-items: end;
+  }
+  .outro-eyebrow {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
     font-family: var(--mono);
-    font-size: 0.7rem;
+    font-size: 0.72rem;
     letter-spacing: 0.34em;
     text-transform: uppercase;
     color: var(--ember);
-    margin-bottom: 1.6rem;
+    margin-bottom: 1.4rem;
   }
+  .outro-eyebrow::before { content: ""; width: 2.4rem; height: 1px; background: var(--ember); opacity: 0.5; }
   .outro h2 {
     font-family: var(--display);
     font-weight: 800;
-    font-size: clamp(2.2rem, 7vw, 5.6rem);
-    line-height: 1;
+    font-size: clamp(2.3rem, 5.6vw, 4.8rem);
+    line-height: 0.98;
     letter-spacing: -0.025em;
     text-transform: uppercase;
-    max-width: 12em;
-    margin: 0 auto 2.4rem;
+    text-wrap: balance;
   }
-  .outro h2 em { font-style: normal; color: transparent; -webkit-text-stroke: 1px var(--ember); }
-  .mail {
-    display: inline-block;
+  .outro-line { color: var(--dim); font-size: clamp(1rem, 1.4vw, 1.12rem); max-width: 42ch; margin-top: 1.4rem; }
+  .outro-card {
+    container-type: inline-size;
+    background: linear-gradient(180deg, rgba(17, 21, 39, 0.92), rgba(10, 13, 26, 0.92));
+    border: 1px solid rgba(255, 169, 77, 0.28);
+    border-radius: 10px;
+    padding: clamp(1.3rem, 3vw, 2rem);
+    box-shadow: 0 40px 90px -45px rgba(255, 169, 77, 0.45);
+  }
+  .outro-card .label {
     font-family: var(--mono);
-    font-size: clamp(0.85rem, 2.4vw, 1.25rem);
-    letter-spacing: 0.02em;
+    font-size: 0.66rem;
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+    color: var(--dim);
+    margin-bottom: 0.8rem;
+  }
+  .mail {
+    display: block;
+    font-family: var(--mono);
+    font-weight: 700;
+    /* sized from the card's width, so the address stays on one line however narrow the card gets */
+    font-size: clamp(0.78rem, 3.4vw, 1.2rem);
+    font-size: clamp(0.72rem, 5cqi, 1.2rem);
+    color: var(--bg);
+    background: var(--ember);
+    border-radius: 6px;
+    padding: 1.05rem 0.8rem;
+    padding: 1.05rem 4cqi;
+    text-align: center;
+    text-decoration: none;
+    overflow-wrap: anywhere;
+    transition: background 0.2s, transform 0.2s, box-shadow 0.2s;
+  }
+  .mail:hover { background: #ffb866; transform: translateY(-2px); box-shadow: 0 16px 36px -14px rgba(255, 169, 77, 0.7); }
+  .mail:active { transform: none; }
+  .outro-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.8rem; }
+  .outro-row a, .outro-row button {
+    flex: 1 1 auto;
+    font-family: var(--mono);
+    font-size: 0.74rem;
+    letter-spacing: 0.04em;
     color: var(--bone);
     text-decoration: none;
-    border: 1px solid var(--line);
-    border-radius: 100px;
-    padding: 1rem clamp(1.4rem, 4vw, 2.6rem);
-    transition: border-color 0.25s, box-shadow 0.25s, transform 0.25s;
+    text-align: center;
+    background: rgba(236, 232, 221, 0.04);
+    border: 1px solid rgba(236, 232, 221, 0.16);
+    border-radius: 4px;
+    padding: 0.65rem 0.9rem;
+    cursor: pointer;
+    transition: border-color 0.2s, background 0.2s, color 0.2s;
   }
-  .mail:hover {
-    border-color: var(--ember);
-    box-shadow: 0 0 34px rgba(255, 169, 77, 0.25);
-    transform: translateY(-3px);
-  }
+  .outro-row a:hover, .outro-row button:hover { border-color: rgba(236, 232, 221, 0.45); background: rgba(236, 232, 221, 0.08); }
+  .outro-row .done { color: var(--lumen); border-color: var(--lumen); }
+  @media (max-width: 900px) { .outro-inner { grid-template-columns: minmax(0, 1fr); } }
 
   /* ============ footer ============ */
   footer {
@@ -686,11 +1097,13 @@
   @media (prefers-reduced-motion: reduce) {
     html { scroll-behavior: auto; }
     .hero h1 .row > span { animation: none; transform: none; }
-    .glyphs span { animation: none; }
+    .hero { transition: none; }
+    .reel-cap { transition: none; }
+    .shots img { animation: none; }
+    .shots img:first-of-type { opacity: 1; }
     .rotline .rot { transition: none; }
     .rotline .rot::after { animation: none; }
     .scroll-cue::after { animation: none; }
-    .strip .belt { animation: none; }
     .dig, .reveal { opacity: 1; transform: none; transition: none; }
     .rail .pip { transition: none; }
     .lb { transition: none; }
@@ -698,6 +1111,13 @@
 </style>
 </head>
 <body>
+
+<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false">
+  <symbol id="laurel" viewBox="0 -4 40 104">
+    <path d="M31 98Q-3 60 19 4" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/>
+    <path fill="currentColor" d="M26.5 92.6C22.4 88.1 14.3 88.4 10.6 91.3C13.8 94.8 21.7 96.4 26.5 92.6ZM26.5 92.6C30.4 88.9 29.9 82 27.1 78.9C24.1 81.8 22.9 88.6 26.5 92.6ZM20 82.7C16.7 77.9 9.2 77.1 5.3 79.3C7.8 83 15 85.6 20 82.7ZM20 82.7C24.1 79.8 24.5 73.3 22.4 70C19.2 72.2 17.2 78.5 20 82.7ZM15.1 72.2C12.8 67.3 5.9 65.5 2 67C3.8 70.8 10.1 74.2 15.1 72.2ZM15.1 72.2C19.4 70.1 20.7 64.1 19.2 60.8C15.9 62.4 13.1 67.9 15.1 72.2ZM11.9 61.2C10.5 56.4 4.4 53.7 0.6 54.5C1.7 58.3 7 62.3 11.9 61.2ZM11.9 61.2C16.2 59.9 18.3 54.5 17.3 51.2C14.1 52.3 10.7 56.9 11.9 61.2ZM10.5 49.7C9.8 45 4.6 41.7 0.9 41.9C1.5 45.6 5.8 50 10.5 49.7ZM10.5 49.7C14.6 49 17.2 44.4 16.8 41.2C13.6 41.7 10 45.6 10.5 49.7ZM10.7 37.6C10.7 33.2 6.3 29.5 2.9 29.3C3 32.7 6.4 37.3 10.7 37.6ZM10.7 37.6C14.5 37.5 17.5 33.6 17.6 30.6C14.6 30.7 10.7 33.7 10.7 37.6ZM12.6 24.9C13.1 21 9.5 17.1 6.5 16.5C6.1 19.6 8.7 24.2 12.6 24.9ZM12.6 24.9C16.1 25.3 19.3 22.1 19.7 19.4C17 19.1 13.1 21.5 12.6 24.9ZM16.2 11.8C17 8.2 14.2 4.3 11.5 3.5C10.8 6.3 12.7 10.7 16.2 11.8ZM18.4 5.7C21.7 4.2 22.9 -0.5 21.8 -3.2C19.2 -2 16.9 2.2 18.4 5.7Z"/>
+  </symbol>
+</svg>
 
 <div class="rail" aria-hidden="true">
   <div class="pip" id="pip"></div>
@@ -709,33 +1129,60 @@
   <nav>
     <a href="#work">Games</a>
     <a href="#side">Other</a>
-    <a href="#craft">Craft</a>
     <a href="#contact">Contact</a>
   </nav>
 </header>
 
 <section class="hero" id="top">
-  <div class="glyphs" id="glyphs" aria-hidden="true"></div>
-  <canvas id="motes" aria-hidden="true"></canvas>
-
   <div class="hero-inner">
-    <p class="hero-eyebrow">Leiria, Portugal · open to teams</p>
-    <h1>
-      <span class="row"><span>Henrique</span></span>
-      <span class="row ghost"><span>Rodrigues</span></span>
-    </h1>
+    <div class="hero-copy">
+      <p class="hero-eyebrow">Leiria, Portugal · open to work</p>
+      <h1>
+        <span class="row"><span>Henrique</span></span>
+        <span class="row ghost"><span>Rodrigues</span></span>
+      </h1>
 
-    <p class="rotline">
-      <span class="lead">I build</span>
-      <span class="rot" id="rot">VR stealth games</span>
-    </p>
-
-    <div class="hero-sub">
-      <p class="role">Game Programmer</p>
-      <p class="pitch">
-        Studying game development at Universidade de Leiria e Oeste.
+      <p class="rotline">
+        <span class="lead">I make</span>
+        <span class="rot" id="rot">games that fit on a floppy disk</span>
       </p>
+
+      <div class="hero-sub">
+        <p class="role">Game Programmer</p>
+        <p class="pitch">I study game development at Universidade de Leiria e Oeste.</p>
+      </div>
+
+      <div class="hero-actions">
+        <button class="btn primary btn-play trailer" type="button" data-trailer="reel" data-title="Reel">Watch the reel</button>
+        <a class="btn" href="mailto:diogo.rodrigues01@hotmail.com">Email me</a>
+        <a class="btn" href="https://github.com/HenriqueDVR" target="_blank" rel="noopener">GitHub</a>
+        <a class="btn" href="https://henrricos.itch.io" target="_blank" rel="noopener">itch.io</a>
+      </div>
+
+      <a class="hero-award" href="#floppy">
+        <svg class="laurel" aria-hidden="true"><use href="#laurel"/></svg>
+        <span>Floppy Dungeon won the NEXT STAGE Special Award</span>
+        <svg class="laurel flip" aria-hidden="true"><use href="#laurel"/></svg>
+      </a>
     </div>
+
+    <!-- the reel: one muted video cut from every project (tools/make_reel.py); chapters live in the page script -->
+    <figure class="reel" aria-label="Reel: clips from my games and tools">
+      <video id="reel" muted loop playsinline preload="metadata" poster="media/reel-poster.jpg" aria-hidden="true">
+        <source src="media/reel.mp4" type="video/mp4">
+      </video>
+      <button class="reel-open trailer" type="button" data-trailer="reel" data-title="Reel" aria-label="Watch the reel with controls"></button>
+      <figcaption class="reel-cap" id="reelCap">
+        <a class="reel-title" href="#zeroday">Zero Day: Aftermath</a>
+        <span class="reel-text">Enemy AI that sees and hears you</span>
+        <span class="reel-tech">Unreal Engine 5 · C++</span>
+      </figcaption>
+      <button class="reel-toggle" type="button" aria-label="Pause the reel">
+        <svg class="i-pause" viewBox="0 0 12 12" aria-hidden="true"><path d="M2 1h3v10H2zM7 1h3v10H7z"/></svg>
+        <svg class="i-play" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 1l8 5-8 5z"/></svg>
+      </button>
+      <div class="reel-bar" role="group" aria-label="Reel chapters"></div>
+    </figure>
   </div>
 
   <p class="scroll-cue">Scroll</p>
@@ -749,63 +1196,94 @@
       <h2>Games</h2>
     </div>
 
-    <article class="dig jam">
-      <div class="dig-meta">
-        <span class="yr">2026</span>
-        <span class="genre">First-person crawler</span>
-        <span class="status live">Released</span>
-        <span>1.44 MB cap</span>
-      </div>
+    <article class="dig jam" id="floppy">
       <div class="dig-body">
+        <div class="dig-meta">
+          <span class="yr">2026</span>
+          <span class="genre">First-person adventure</span>
+          <span class="status live">Released</span>
+          <span>1.44 MB cap</span>
+        </div>
         <h3>Floppy Dungeon</h3>
         <div class="dig-tags">
-          <span>C++17</span><span>Win32 &middot; GDI</span><span>No engine</span><span>ASCII raycaster</span><span>Procedural</span>
+          <span>C++17</span><span>Direct3D 11</span><span>No engine</span><span>Text-mode renderer</span><span>Procedural</span>
         </div>
-        <p class="crew"><b>Solo</b> &middot; contest entry &middot; finished</p>
+        <p class="crew"><b>Solo</b>, contest entry</p>
         <p class="desc">
-          A first-person dungeon crawler for a contest with one rule: the whole
-          game has to fit in <strong>1,474,560 bytes</strong>, the size of a
-          floppy disk, and run on a clean machine with nothing installed.
+          A first-person adventure on a procedurally generated island, with
+          melee combat, parries and dodges, a bow and a handful of abilities.
+          I made it for 2P Game Arcade's 1.44MB Game Development Contest, where
+          the whole game had to fit on a single floppy disk, and it won the
+          <strong>NEXT STAGE Special Award</strong>.
         </p>
         <p class="desc">
-          So there is no engine, no art files and no libraries. Just Win32 and
-          GDI, an <strong>ASCII raycaster</strong> for the rendering, and
-          lighting, dungeons, biomes and audio all generated at runtime.
+          It ships as one exe under <strong>1,474,560 bytes</strong> with
+          nothing to install, written in C++ on Direct3D 11 without an engine
+          or any art files. The island, the buildings and the music are all
+          generated when you press start. Everything on screen is text. The
+          renderer picks a character for each cell instead of running an
+          ASCII filter over a normal 3D image.
         </p>
         <div class="dig-links">
-          <button class="trailer" type="button" data-trailer="floppy" data-title="Floppy Dungeon clip">Watch clip</button>
           <a class="primary" href="https://henrricos.itch.io/floppydungeon" target="_blank" rel="noopener">Play on itch.io</a>
+          <a href="https://x.com/2PGAMEARCADE/status/2111844205928804390" target="_blank" rel="noopener">Award announcement</a>
         </div>
+      </div>
+      <div class="dig-media">
+        <figure class="media shots">
+          <img src="media/floppy-1.jpg" alt="Floppy Dungeon: a keep on a hill at dusk" width="1280" height="720" loading="lazy">
+          <img src="media/floppy-2.jpg" alt="Floppy Dungeon: blue ice spires on a frozen plain" width="1280" height="720" loading="lazy">
+          <img src="media/floppy-3.jpg" alt="Floppy Dungeon: an eclipsed sun over the trees" width="1280" height="720" loading="lazy">
+          <img src="media/floppy-4.jpg" alt="Close-up of the keep, showing that the picture is made of text characters" width="1280" height="720" loading="lazy">
+          <figcaption class="media-tag">In-game screenshots</figcaption>
+        </figure>
+        <a class="award" href="https://x.com/2PGAMEARCADE/status/2111844205928804390" target="_blank" rel="noopener"
+           aria-label="NEXT STAGE Special Award at the 1.44MB Game Development Contest. Opens 2P Game Arcade's announcement on X.">
+          <span class="award-seal">
+            <span class="award-frame">
+              <svg class="laurel" aria-hidden="true"><use href="#laurel"/></svg>
+              <span class="award-text">
+                <span class="award-contest">1.44MB Game Dev Contest</span>
+                <span class="award-title">Special Award</span>
+                <span class="award-org">NEXT STAGE<span lang="ko">특별상</span></span>
+              </span>
+              <svg class="laurel flip" aria-hidden="true"><use href="#laurel"/></svg>
+            </span>
+          </span>
+          <span class="award-note">2P Game Arcade, October 2026</span>
+        </a>
       </div>
     </article>
 
-    <article class="dig vr">
-      <div class="dig-meta">
-        <span class="yr">2026</span>
-        <span class="genre">VR Stealth</span>
-        <span class="status live">Released</span>
-        <span>on itch.io</span>
-      </div>
+    <article class="dig vr" id="zeroday">
       <div class="dig-body">
+        <div class="dig-meta">
+          <span class="yr">2026</span>
+          <span class="genre">VR Stealth</span>
+          <span class="status live">Released</span>
+          <span>on itch.io</span>
+        </div>
         <h3>Zero Day: Aftermath</h3>
         <div class="dig-tags">
           <span>VR</span><span>Stealth</span><span>Unreal Engine 5</span><span>C++</span><span>OpenXR</span>
         </div>
-        <p class="crew"><b>Programmer</b> · Negentropy Studio · final-year project · team of 3</p>
+        <p class="crew"><b>Programmer</b> at Negentropy Studio, final-year project, team of 3</p>
         <p class="desc">
-          A VR stealth game. You play a broken maintenance droid looking for the
-          last human survivors on a ruined Earth, hunted by the machines that
-          wiped them out. I wrote the gameplay codebase:
-          <strong>squad enemy AI</strong> with sight and hearing occlusion,
-          corpse detection and flanking.
+          A VR stealth game where you play a damaged maintenance droid,
+          searching a ruined Earth for the last human survivors while the
+          machines that wiped them out hunt you. I wrote the gameplay code,
+          including the <strong>enemy AI</strong>. Enemies work as a squad.
+          They see and hear you (walls block both), react when they find a
+          body and try to flank you.
         </p>
         <p class="desc">
-          The hands are physical. You load magazines by hand and heal by
-          drinking fuel, with liquid simulation. A custom
-          <strong>LOD and hibernation system</strong> keeps it at VR frame rate.
+          Most interactions are physical. You reload by pushing magazines in
+          with your hand, and you heal by drinking fuel, which runs on a liquid
+          simulation. To hold the frame rate VR needs, I built a
+          <strong>LOD and hibernation system</strong> that puts distant actors
+          to sleep.
         </p>
         <div class="dig-links">
-          <button class="trailer" type="button" data-trailer="zeroday" data-title="Zero Day: Aftermath trailer">Watch trailer</button>
           <a class="primary" href="https://negentropystudio.itch.io/zero-day-aftermath" target="_blank" rel="noopener">Play on itch.io</a>
           <a href="https://linktr.ee/Negentropy.Studio" target="_blank" rel="noopener">Studio links</a>
           <a href="https://www.instagram.com/negentropy.gamesstudios/" target="_blank" rel="noopener">Instagram</a>
@@ -814,200 +1292,220 @@
           <a href="https://freesound.org/people/negentropy.studio/" target="_blank" rel="noopener">FreeSound</a>
         </div>
       </div>
+      <div class="dig-media">
+        <figure class="media">
+          <video class="crop-top" muted loop playsinline preload="none" poster="media/zd-patrol.jpg" data-loop="media/zd-patrol.mp4" aria-hidden="true"></video>
+          <button class="media-play trailer" type="button" data-trailer="zeroday" data-title="Zero Day: Aftermath trailer"><span>Watch trailer</span></button>
+          <figcaption class="media-tag">Gameplay: an enemy on patrol</figcaption>
+        </figure>
+      </div>
     </article>
 
-
-    <article class="dig fps">
-      <div class="dig-meta">
-        <span class="yr">2025</span>
-        <span class="genre">Roguelite FPS</span>
-        <span class="status live">Released</span>
-      </div>
+    <article class="dig fps" id="intothedark">
       <div class="dig-body">
+        <div class="dig-meta">
+          <span class="yr">2025</span>
+          <span class="genre">Roguelite FPS</span>
+          <span class="status live">Released</span>
+        </div>
         <h3>Into the Dark</h3>
         <div class="dig-tags">
           <span>FPS</span><span>Single-player PVE</span><span>Unreal Engine 5</span><span>Cel-shaded 3D</span>
         </div>
-        <p class="crew"><b>Programmer</b> · Outsiders Studios · team of 3</p>
+        <p class="crew"><b>Programmer</b> at Outsiders Studios, team of 3</p>
         <p class="desc">
-          A cel-shaded FPS where a knight fights through goblin caves to rescue
-          the princess, crossbow in one hand and shield in the other. I built
-          the <strong>procedural map generation</strong>, the per-room
-          <strong>wave spawner</strong> with difficulty scaling per level,
-          shield blocking driven by animation notifies, and the health drop
-          system.
+          A cel-shaded roguelite shooter. You play a knight with a crossbow in
+          one hand and a shield in the other, fighting through goblin caves to
+          rescue the princess. I programmed the
+          <strong>procedural map generation</strong> and the
+          <strong>wave spawner</strong>, where every room runs its own waves
+          and the difficulty goes up each level. I also did the shield
+          blocking, timed off animation notifies, and the health drops.
         </p>
         <div class="dig-links">
-          <button class="trailer" type="button" data-trailer="intothedark" data-title="Into the Dark trailer">Watch trailer</button>
           <a class="primary" href="https://outsidersstudios.itch.io/into-the-dark" target="_blank" rel="noopener">Play on itch.io</a>
           <a href="https://www.indiedb.com/games/into-the-dark1/articles" target="_blank" rel="noopener">Dev log</a>
           <a href="https://www.instagram.com/outsiders.games/" target="_blank" rel="noopener">Instagram</a>
           <a href="https://www.youtube.com/channel/UCGowFSKGV1YSRl4eYtH0wxg" target="_blank" rel="noopener">YouTube</a>
         </div>
       </div>
+      <div class="dig-media">
+        <div class="media type-poster" aria-hidden="true">
+          <span>Procedural maps</span>
+          <span>Wave spawner</span>
+          <span>Shield blocking</span>
+        </div>
+      </div>
     </article>
 
-    <article class="dig coop">
-      <div class="dig-meta">
-        <span class="yr">2024</span>
-        <span class="genre">Co-op Puzzle</span>
-        <span class="status live">Released</span>
-        <span>plays in browser</span>
-      </div>
+    <article class="dig coop" id="intothecave">
       <div class="dig-body">
+        <div class="dig-meta">
+          <span class="yr">2024</span>
+          <span class="genre">Co-op Puzzle</span>
+          <span class="status live">Released</span>
+          <span>plays in browser</span>
+        </div>
         <h3>Into the Cave</h3>
         <div class="dig-tags">
           <span>Co-op</span><span>Puzzle-platformer</span><span>Unity</span><span>First game</span>
         </div>
-        <p class="crew"><b>Programmer</b> · ForeignerStudio · team of 3</p>
+        <p class="crew"><b>Programmer</b> at ForeignerStudio, team of 3</p>
         <p class="desc">
-          My first game. A co-op puzzle-platformer built around
-          <strong>asymmetry</strong>: one player is big and strong enough to
-          move the world, the other small enough to slip through it. Each
-          absorbs a different kind of light to unlock abilities. Local co-op on
-          one keyboard.
+          My first game, a puzzle-platformer for two players sharing one
+          keyboard. One character is big and strong enough to push heavy
+          things around, and the other is small enough to squeeze through
+          gaps. Each one absorbs a different kind of light to unlock new
+          abilities, and the puzzles are built around using both of them.
         </p>
         <div class="dig-links">
-          <button class="trailer" type="button" data-trailer="intothecave" data-title="Into the Cave trailer">Watch trailer</button>
           <a class="primary" href="https://foreignerstudio.itch.io/into-the-cave" target="_blank" rel="noopener">Play on itch.io</a>
           <a href="https://www.youtube.com/channel/UCCHg7WS_kTUKLxTuU4BSUrQ" target="_blank" rel="noopener">YouTube</a>
           <a href="https://twitter.com/foreignerstudio" target="_blank" rel="noopener">X (Twitter)</a>
           <a href="https://www.indiedb.com/members/foreignerstudio" target="_blank" rel="noopener">IndieDB</a>
         </div>
       </div>
+      <div class="dig-media">
+        <figure class="media">
+          <img src="media/cave.jpg" alt="Into the Cave: the title over a cave level" width="1280" height="720" loading="lazy">
+          <button class="media-play trailer" type="button" data-trailer="intothecave" data-title="Into the Cave trailer"><span>Watch trailer</span></button>
+          <figcaption class="media-tag">Trailer</figcaption>
+        </figure>
+      </div>
     </article>
   </section>
 
-  <!-- ============ tools strip ============ -->
-  <div class="strip" aria-label="Tools and specialties">
-    <div class="belt" id="belt">
-      <span>Unreal Engine 5</span><span>C++</span><span>Unity</span><span>C#</span>
-      <span>OpenXR · VR</span><span>Enemy AI</span><span>Procedural generation</span>
-      <span>Gameplay systems</span><span>Performance work</span><span>Blueprints</span>
-      <span>Web tooling</span>
-    </div>
-  </div>
-
-  <!-- ============ side projects ============ -->
+  <!-- ============ other work ============ -->
   <section class="sect side" id="side">
     <div class="sect-head">
       <h2>Other Work</h2>
     </div>
-    <div class="side-grid">
-      <div class="side-card reveal">
-        <span class="kind">Python · Streamlit</span>
-        <h3>DEGIRO Portfolio Tracker</h3>
-        <p>
-          A dashboard that rebuilds a whole DEGIRO portfolio from the CSV
-          exports the broker gives you and tracks it against live market prices:
-          positions, cost basis and how the portfolio moved over time. It runs
-          locally, so the account data never leaves the machine.
-        </p>
-        <div class="dig-links">
-          <a class="primary" href="https://degirotrack.streamlit.app" target="_blank" rel="noopener">Open the app</a>
-        </div>
-      </div>
 
-      <div class="side-card reveal">
-        <span class="kind">Static site · vanilla JS · German</span>
-        <h3>Stallmaß</h3>
-        <p>
-          A German site of free calculators for keeping chickens: coop size,
-          feed cost, how many hens a household needs, an incubation calendar
-          that gives you the hatch date, plus guides on registration and housing
-          rules. Plain HTML with no build step, every calculation done in the
-          browser.
-        </p>
-        <div class="dig-links">
-          <a class="primary" href="https://stallmass.de" target="_blank" rel="noopener">stallmass.de</a>
+    <p class="sub-head">In progress</p>
+    <div class="feat-list">
+      <article class="feat glt reveal" id="glt">
+        <figure class="media feat-media">
+          <video muted loop playsinline preload="none" poster="media/glt-coop.jpg" data-loop="media/glt-coop.mp4" aria-hidden="true"></video>
+          <figcaption class="media-tag">Two players, split screen</figcaption>
+        </figure>
+        <div class="feat-body">
+          <div class="dig-meta">
+            <span class="genre">Co-op mod</span>
+            <span class="status wip">In development</span>
+            <span>Release v0.1.4</span>
+          </div>
+          <h3>GLTPS1 Co-op</h3>
+          <p class="desc">
+            GLTPS1 is a PS1-style Girls' Last Tour fan game that was left
+            unfinished. I added online co-op to it: one player is Chito, the
+            other is Yuuri, and they travel the same world together. Both
+            girls, the Kettenkrad, gunfire and the NPCs stay in sync, and the
+            connection goes direct over UDP, falling back to Epic's relay when
+            a router gets in the way.
+          </p>
+          <p class="desc">
+            Now I'm rebuilding a lot of its systems, starting with an open
+            world that both players generate from the same seed.
+          </p>
+          <div class="dig-tags">
+            <span>Unity</span><span>C#</span><span>Networking</span><span>LiteNetLib</span><span>Procedural</span>
+          </div>
+          <div class="dig-links">
+            <a class="primary" href="https://github.com/HenriqueDVR/GLTPS1/releases" target="_blank" rel="noopener">Download the co-op build</a>
+            <a href="https://github.com/HenriqueDVR/GLTPS1" target="_blank" rel="noopener">Source on GitHub</a>
+            <a href="https://github.com/snavu/GLTPS1" target="_blank" rel="noopener">Original game</a>
+          </div>
         </div>
-      </div>
+      </article>
 
-      <div class="side-card reveal">
-        <span class="kind">Static site &middot; vanilla JS &middot; EN + PT</span>
-        <h3>RAMSatView</h3>
-        <p>
-          A satellite imagery viewer for the Regi&atilde;o Aut&oacute;noma da
-          Madeira: recent passes over the archipelago, browsable in the browser
-          with no install and no account. Built as a static site and hosted on
-          GitHub Pages.
-        </p>
-        <div class="dig-links">
-          <a class="primary" href="https://henriquedvr.github.io/RAMSatView/pt/" target="_blank" rel="noopener">Open RAMSatView</a>
+      <article class="feat oc2 reveal" id="oc2vrm">
+        <figure class="media feat-media">
+          <img src="media/oc2vrm.jpg" alt="OC2VRM's character select screen, with a blue slime character called Leaflit" width="1280" height="720" loading="lazy">
+          <figcaption class="media-tag">The guided app</figcaption>
+        </figure>
+        <div class="feat-body">
+          <div class="dig-meta">
+            <span class="genre">Avatar tool</span>
+            <span class="status wip">Not public yet</span>
+          </div>
+          <h3>OC2VRM</h3>
+          <p class="desc">
+            A Blender add-on and a guided desktop app that turn a character
+            made with an image-to-3D generator into a VRM avatar you can stream
+            with in Warudo or VNyan. It rigs the body, adds blinking and mouth
+            shapes, sets up swinging hair and cloth and gives the model toon
+            shading. Everything runs offline on your own computer.
+          </p>
+          <div class="dig-tags">
+            <span>Python</span><span>Blender add-on</span><span>VRM 1.0</span><span>Rigging</span>
+          </div>
         </div>
-      </div>
+      </article>
     </div>
-  </section>
 
-  <!-- ============ craft ============ -->
-  <section class="sect creed" id="craft">
-    <div class="sect-head">
-      <h2>How I Build</h2>
-      <span class="count">what stays the same across genres</span>
-    </div>
-    <div class="creed-grid">
-      <div class="creed-cell reveal">
-        <span class="rune">◇</span>
-        <h3>Systems over scripts</h3>
+    <p class="sub-head">Web tools</p>
+    <ul class="tools">
+      <li class="reveal">
+        <div><span class="kind">Python · Streamlit</span><h3>DEGIRO Portfolio Tracker</h3></div>
         <p>
-          One-off scripted moments age badly. I'd rather build the spawner,
-          the AI senses, the generator: systems that keep surprising you after
-          a hundred runs.
+          A dashboard for DEGIRO investors. You give it the CSV exports from
+          your account and it rebuilds the whole portfolio, then tracks it
+          against live market prices so you can see your positions, cost basis
+          and how the portfolio has done over time.
         </p>
-      </div>
-      <div class="creed-cell reveal">
-        <span class="rune">◈</span>
-        <h3>Genre is a brief, not an identity</h3>
+        <a class="go" href="https://degirotrack.streamlit.app" target="_blank" rel="noopener">Open the app ↗</a>
+      </li>
+      <li class="reveal">
+        <div><span class="kind">Static site · vanilla JS · German</span><h3>Stallmaß</h3></div>
         <p>
-          VR stealth, a cel-shaded FPS, a two-player puzzle game, a dungeon
-          crawler under a byte budget. Different rules every time. The job is
-          working out what this one needs and building that.
+          Free calculators for people keeping chickens in Germany: how big the
+          coop should be, what the feed will cost, how many hens a household
+          needs, and an incubation calendar that works out the hatch date.
+          There are also guides on registering a flock and the rules for
+          housing it. It's plain HTML and JavaScript, and all the maths happens
+          in the browser.
         </p>
-      </div>
-      <div class="creed-cell reveal">
-        <span class="rune">▲</span>
-        <h3>Frame rate is a feature</h3>
+        <a class="go" href="https://stallmass.de" target="_blank" rel="noopener">stallmass.de ↗</a>
+      </li>
+      <li class="reveal">
+        <div><span class="kind">Static site · vanilla JS · EN + PT</span><h3>RAMSatView</h3></div>
         <p>
-          Especially in VR, where dropped frames are felt in the stomach.
-          Custom LOD, hibernation and profiling passes are part of the gameplay
-          work, not an afterthought.
+          A viewer for recent satellite images of the Regi&atilde;o
+          Aut&oacute;noma da Madeira. You can look through the latest passes
+          over the archipelago straight from the browser, without installing
+          anything or making an account. It's a static site hosted on GitHub
+          Pages.
         </p>
-      </div>
-      <div class="creed-cell reveal">
-        <span class="rune">✦</span>
-        <h3>Feel is testable</h3>
-        <p>
-          Reload by hand, drink your health, block with a real shield. If a
-          mechanic can live in the player's body instead of a menu, it
-          should.
-        </p>
-      </div>
-      <div class="creed-cell reveal">
-        <span class="rune">●</span>
-        <h3>Small teams, whole ownership</h3>
-        <p>
-          Most of these were made by three people. I've owned entire gameplay
-          codebases end to end: architecture, implementation, debugging,
-          shipping.
-        </p>
-      </div>
-    </div>
+        <a class="go" href="https://henriquedvr.github.io/RAMSatView/pt/" target="_blank" rel="noopener">Open RAMSatView ↗</a>
+      </li>
+    </ul>
   </section>
 
   <!-- ============ contact ============ -->
   <section class="outro" id="contact">
-    <p class="eyebrow reveal">Get in touch</p>
-    <h2 class="reveal">Looking for a programmer to bring your vision to reality?</h2>
-    <p class="reveal">
-      <a class="mail" href="mailto:diogo.rodrigues01@hotmail.com">diogo.rodrigues01@hotmail.com</a>
-    </p>
+    <div class="outro-inner">
+      <div class="reveal">
+        <p class="outro-eyebrow">Contact</p>
+        <h2>Hiring a game programmer? Let's talk.</h2>
+        <p class="outro-line">I'm looking for a programming role on a game team. Email is the quickest way to reach me.</p>
+      </div>
+      <div class="outro-card reveal">
+        <p class="label">Email</p>
+        <a class="mail" href="mailto:diogo.rodrigues01@hotmail.com">diogo.rodrigues01@hotmail.com</a>
+        <div class="outro-row">
+          <button type="button" data-copy="diogo.rodrigues01@hotmail.com">Copy address</button>
+          <a href="https://github.com/HenriqueDVR" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://henrricos.itch.io" target="_blank" rel="noopener">itch.io</a>
+        </div>
+      </div>
+    </div>
   </section>
 
 </main>
 
 <footer>
   <div>
-    <p>Studios I've built with:</p>
+    <p>Studios I've worked with:</p>
     <div class="studios">
       <a href="https://linktr.ee/Negentropy.Studio" target="_blank" rel="noopener">Negentropy Studio</a>
       <a href="https://foreignerstudio.itch.io/" target="_blank" rel="noopener">ForeignerStudio</a>
@@ -1036,9 +1534,10 @@
      "dQw4w9WgXcQ"                         → YouTube video id
      "https://player.vimeo.com/video/123"  → any embeddable URL
      "media/zeroday.mp4"                   → a local mp4/webm file
-   Leave a value as "" and its button politely says "trailer soon".
+   Leave a value as "" and its button is hidden.
    ========================================================================= */
 var TRAILERS = {
+  reel:        "media/reel.mp4",
   zeroday:     "y6sRvttsVG4",
   floppy:      "",
   intothedark: "",
@@ -1049,46 +1548,16 @@ var TRAILERS = {
 (function () {
   "use strict";
   var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-  var hero = document.querySelector(".hero");
-
-  /* ---------- code field (always visible, no torch) ---------- */
-  var LINES = [
-    "spawner { interval: 0.72s, speed: x1.4 }",
-    "if (CanSeePlayer() && !IsOccluded()) Flank();",
-    "OnCorpseDetected → AlertSquad(radius: 12m)",
-    "chunk = GenerateRoom(seed, depth);",
-    "HibernateActorsBeyond(lodRadius);",
-    "magazine.LoadedByHand = true;",
-    "fuel.Drink() → hp += liquid.volume;",
-    "notify: Shield_Block_Start",
-    "light.Absorb(kind) → UnlockAbility()",
-    "wave.Scale(level, roomIndex);",
-    "droid.state = SEARCHING_SURVIVORS;",
-    "co-op: oneKeyboard, twoPlayers",
-    "budget: 1474560 bytes // no engine",
-    "raycast: DDA hit → glyph ramp #%+:.",
-    "portfolio.Rebuild(fromCsv);"
-  ];
-  var glyphs = document.getElementById("glyphs");
-  var frag = document.createDocumentFragment();
-  for (var i = 0; i < LINES.length; i++) {
-    var s = document.createElement("span");
-    s.textContent = LINES[i];
-    s.style.left = (3 + Math.random() * 80) + "%";
-    s.style.top = (5 + Math.random() * 88) + "%";
-    s.style.animationDelay = (-Math.random() * 26).toFixed(1) + "s";
-    s.style.animationDuration = (20 + Math.random() * 16).toFixed(1) + "s";
-    frag.appendChild(s);
-  }
-  glyphs.appendChild(frag);
 
   /* ---------- rotating genre line ---------- */
   var ROT = [
-    { t: "VR stealth games",        c: "var(--violet)" },
-    { t: "roguelite FPS",           c: "var(--ember)" },
-    { t: "co-op puzzle-platformers", c: "var(--lumen)" },
-    { t: "games that fit on a floppy", c: "var(--sky)" },
-    { t: "the odd web tool",        c: "var(--steel)" }
+    { t: "games that fit on a floppy disk", c: "var(--sky)" },
+    { t: "VR stealth games",                c: "var(--violet)" },
+    { t: "co-op mods",                      c: "var(--lumen)" },
+    { t: "VTuber avatar tools",             c: "var(--rose)" },
+    { t: "roguelite shooters",              c: "var(--ember)" },
+    { t: "co-op puzzle games",              c: "var(--lumen)" },
+    { t: "web tools on the side",           c: "var(--steel)" }
   ];
   var rotEl = document.getElementById("rot");
   var rotI = 0;
@@ -1109,65 +1578,6 @@ var TRAILERS = {
     }, 360);
   }
   setInterval(rotNext, reduced ? 4200 : 2800);
-
-  /* ---------- drifting motes ---------- */
-  var canvas = document.getElementById("motes");
-  var ctx = canvas.getContext("2d");
-  var W, H, dpr, motes = [];
-  var TINTS = ["#ffa94d", "#8ef0d6", "#9d8cff", "#6fb8ff"];
-  function resize() {
-    dpr = window.devicePixelRatio || 1;
-    W = hero.clientWidth;
-    H = hero.clientHeight;
-    canvas.width = W * dpr;
-    canvas.height = H * dpr;
-    canvas.style.width = W + "px";
-    canvas.style.height = H + "px";
-    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
-  }
-  function spawnMote(randomY) {
-    return {
-      x: Math.random() * W,
-      y: randomY ? Math.random() * H : H + 8,
-      vx: (Math.random() - 0.5) * 0.16,
-      vy: -(0.14 + Math.random() * 0.34),
-      r: 0.7 + Math.random() * 1.5,
-      tint: TINTS[Math.floor(Math.random() * TINTS.length)],
-      life: 0,
-      max: 420 + Math.random() * 520,
-      sway: Math.random() * Math.PI * 2
-    };
-  }
-  function tick() {
-    ctx.clearRect(0, 0, W, H);
-    if (motes.length < 34 && Math.random() < 0.3) motes.push(spawnMote(false));
-    for (var i = motes.length - 1; i >= 0; i--) {
-      var p = motes[i];
-      p.life++;
-      p.sway += 0.018;
-      p.x += p.vx + Math.sin(p.sway) * 0.13;
-      p.y += p.vy;
-      if (p.y < -12 || p.life > p.max) { motes.splice(i, 1); continue; }
-      var fade = Math.min(1, p.life / 70) * Math.min(1, (p.max - p.life) / 100);
-      ctx.globalAlpha = fade * 0.62;
-      ctx.fillStyle = p.tint;
-      ctx.beginPath();
-      ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-      ctx.fill();
-    }
-    ctx.globalAlpha = 1;
-    requestAnimationFrame(tick);
-  }
-  resize();
-  window.addEventListener("resize", resize);
-  if (!reduced) {
-    for (var e = 0; e < 18; e++) motes.push(spawnMote(true));
-    requestAnimationFrame(tick);
-  }
-
-  /* ---------- marquee ---------- */
-  var belt = document.getElementById("belt");
-  belt.innerHTML += belt.innerHTML;
 
   /* ---------- scroll reveals ---------- */
   var io = new IntersectionObserver(function (entries) {
@@ -1194,7 +1604,6 @@ var TRAILERS = {
     { id: "top", label: "Intro" },
     { id: "work", label: "Games" },
     { id: "side", label: "Other Work" },
-    { id: "craft", label: "Craft" },
     { id: "contact", label: "Contact" }
   ].map(function (m) { return { el: document.getElementById(m.id), label: m.label }; })
    .filter(function (m) { return !!m.el; });
@@ -1206,9 +1615,11 @@ var TRAILERS = {
     }
   }
 
+  var topBar = document.querySelector(".bar");
   var railTicking = false;
   function updateRail() {
     railTicking = false;
+    topBar.classList.toggle("scrolled", window.scrollY > 24);
     var max = document.documentElement.scrollHeight - window.innerHeight;
     var f = max > 0 ? window.scrollY / max : 0;
     var y = f * (window.innerHeight - 8);
@@ -1229,6 +1640,197 @@ var TRAILERS = {
   window.addEventListener("load", function () { measureMarks(); updateRail(); });
   measureMarks();
   updateRail();
+
+  /* ---------- copy the email address ---------- */
+  /* the clipboard API first, then the old copy command; if a browser blocks both,
+     select the address on the button next to it so Ctrl+C still works */
+  function legacyCopy(text) {
+    var ta = document.createElement("textarea");
+    ta.value = text;
+    ta.setAttribute("readonly", "");
+    ta.style.position = "fixed";
+    ta.style.opacity = "0";
+    document.body.appendChild(ta);
+    ta.select();
+    var ok = false;
+    try { ok = document.execCommand("copy"); } catch (e) { ok = false; }
+    document.body.removeChild(ta);
+    return ok;
+  }
+  document.querySelectorAll("[data-copy]").forEach(function (b) {
+    var label = b.textContent;
+    var text = b.getAttribute("data-copy");
+    function say(msg) {
+      b.textContent = msg;
+      b.classList.add("done");
+      clearTimeout(b._t);
+      b._t = setTimeout(function () { b.textContent = label; b.classList.remove("done"); }, 2200);
+    }
+    function fallback() {
+      if (legacyCopy(text)) { say("Copied"); return; }
+      var mail = document.querySelector(".mail");
+      if (mail && window.getSelection) {
+        var range = document.createRange();
+        range.selectNodeContents(mail);
+        var sel = window.getSelection();
+        sel.removeAllRanges();
+        sel.addRange(range);
+      }
+      say("Press Ctrl+C");
+    }
+    b.addEventListener("click", function () {
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(function () { say("Copied"); }, fallback);
+      } else {
+        fallback();
+      }
+    });
+  });
+})();
+
+/* ================= hero reel =================
+   One muted video cut from clips of each project (tools/make_reel.py prints the
+   chapter list below). The caption and the chapter bar follow the playhead. It
+   plays only while it's on screen, pauses while the lightbox is open, and waits
+   for a click when the visitor prefers less motion. */
+(function () {
+  "use strict";
+  var REEL = [
+    { t: 0,    key: "zeroday", title: "Zero Day: Aftermath", text: "Enemy AI that sees and hears you",             tech: "Unreal Engine 5 · C++" },
+    { t: 4.5,  key: "floppy",  title: "Floppy Dungeon",      text: "The whole game is one 1.44 MB exe",            tech: "C++ · Direct3D 11 · no engine" },
+    { t: 9.8,  key: "zeroday", title: "Zero Day: Aftermath", text: "Enemy states: patrol, suspicious, alert",      tech: "Unreal Engine 5 · C++" },
+    { t: 15.3, key: "glt",     title: "GLTPS1 Co-op",        text: "Online co-op: two players, one Kettenkrad",    tech: "Unity · C# · custom netcode" },
+    { t: 20.3, key: "zeroday", title: "Zero Day: Aftermath", text: "Reloading by hand in VR",                      tech: "Unreal Engine 5 · C++" },
+    { t: 24.8, key: "oc2vrm",  title: "OC2VRM",              text: "From a generated 3D character to a VRM avatar", tech: "Python · Blender" }
+  ];
+  var COLOR = { zeroday: "var(--violet)", floppy: "var(--sky)", glt: "var(--lumen)", oc2vrm: "var(--rose)" };
+
+  var fig = document.querySelector(".reel");
+  var video = document.getElementById("reel");
+  if (!fig || !video) return;
+  var hero = document.querySelector(".hero");
+  var cap = document.getElementById("reelCap");
+  var capTitle = cap.querySelector(".reel-title");
+  var capText = cap.querySelector(".reel-text");
+  var capTech = cap.querySelector(".reel-tech");
+  var bar = fig.querySelector(".reel-bar");
+  var toggle = fig.querySelector(".reel-toggle");
+  var reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  var userPaused = reduced, onScreen = true, boxOpen = false, cur = -1, raf = 0, swapT = 0;
+
+  video.muted = true;
+
+  var marks = REEL.map(function (c) {
+    var b = document.createElement("button");
+    b.type = "button";
+    b.title = c.title;
+    b.setAttribute("aria-label", "Play from: " + c.title + ", " + c.text);
+    b.style.setProperty("--c", COLOR[c.key]);
+    b.addEventListener("click", function () {
+      video.currentTime = c.t + 0.05;
+      userPaused = false;
+      sync();
+      tick();
+    });
+    bar.appendChild(b);
+    return b;
+  });
+
+  function length() { return video.duration && isFinite(video.duration) ? video.duration : 31.25; }
+  function end(i) { return i + 1 < REEL.length ? REEL[i + 1].t : length(); }
+  function sizeMarks() {
+    for (var i = 0; i < REEL.length; i++) marks[i].style.setProperty("--d", (end(i) - REEL[i].t).toFixed(2));
+  }
+  function chapterAt(t) {
+    var i = 0;
+    while (i + 1 < REEL.length && t >= REEL[i + 1].t - 0.04) i++;
+    return i;
+  }
+  function show(i) {
+    if (i === cur) return;
+    cur = i;
+    var c = REEL[i];
+    hero.style.setProperty("--rc", COLOR[c.key]);
+    clearTimeout(swapT);
+    function write() {
+      capTitle.textContent = c.title;
+      capTitle.setAttribute("href", "#" + c.key);
+      capText.textContent = c.text;
+      capTech.textContent = c.tech;
+      cap.classList.remove("swap");
+    }
+    if (reduced) { write(); return; }
+    cap.classList.add("swap");
+    swapT = setTimeout(write, 200);
+  }
+  function tick() {
+    raf = 0;
+    var t = video.currentTime, i = chapterAt(t);
+    show(i);
+    for (var k = 0; k < marks.length; k++) {
+      var p = k < i ? 1 : k > i ? 0 : Math.min(1, Math.max(0, (t - REEL[k].t) / (end(k) - REEL[k].t)));
+      marks[k].style.setProperty("--p", p.toFixed(3));
+    }
+    if (!video.paused) raf = requestAnimationFrame(tick);
+  }
+  function sync() {
+    if (onScreen && !userPaused && !boxOpen && !document.hidden) {
+      var p = video.play();
+      if (p && p.catch) p.catch(function () { fig.classList.add("paused"); });
+    } else if (!video.paused) {
+      video.pause();
+    }
+  }
+
+  video.addEventListener("play", function () {
+    fig.classList.remove("paused");
+    toggle.setAttribute("aria-label", "Pause the reel");
+    if (!raf) raf = requestAnimationFrame(tick);
+  });
+  video.addEventListener("pause", function () {
+    fig.classList.add("paused");
+    toggle.setAttribute("aria-label", "Play the reel");
+  });
+  video.addEventListener("loadedmetadata", sizeMarks);
+  video.addEventListener("seeked", tick);
+  toggle.addEventListener("click", function () {
+    userPaused = !video.paused;
+    if (userPaused) video.pause(); else sync();
+  });
+  document.addEventListener("lightbox", function (e) { boxOpen = !!e.detail; sync(); });
+  document.addEventListener("visibilitychange", sync);
+  if ("IntersectionObserver" in window) {
+    new IntersectionObserver(function (entries) {
+      onScreen = entries[0].isIntersecting;
+      sync();
+    }, { threshold: 0.2 }).observe(fig);
+  }
+
+  sizeMarks();
+  tick();
+  if (reduced) fig.classList.add("paused");
+  sync();
+})();
+
+/* ================= section clips: muted loops that play only while on screen ================= */
+(function () {
+  "use strict";
+  var vids = [].slice.call(document.querySelectorAll("video[data-loop]"));
+  if (!vids.length || !("IntersectionObserver" in window)) return;
+  if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;   /* posters only */
+  var io = new IntersectionObserver(function (entries) {
+    entries.forEach(function (en) {
+      var v = en.target;
+      if (en.isIntersecting) {
+        if (!v.getAttribute("src")) { v.muted = true; v.src = v.getAttribute("data-loop"); }
+        var p = v.play();
+        if (p && p.catch) p.catch(function () {});
+      } else {
+        v.pause();
+      }
+    });
+  }, { threshold: 0.3 });
+  vids.forEach(function (v) { io.observe(v); });
 })();
 
 /* ================= trailer lightbox (loads nothing until clicked) ================= */
@@ -1288,6 +1890,7 @@ var TRAILERS = {
     document.body.classList.add("locked");
     void lb.offsetWidth;            /* flush layout so the fade has a start value */
     lb.classList.add("open");
+    document.dispatchEvent(new CustomEvent("lightbox", { detail: true }));
     closeBtn.focus();
   }
 
@@ -1296,6 +1899,7 @@ var TRAILERS = {
     lb.classList.remove("open");
     stage.innerHTML = "";           /* kills playback + the network connection */
     lb.hidden = true;
+    document.dispatchEvent(new CustomEvent("lightbox", { detail: false }));
     document.body.classList.remove("locked");
     if (lastFocus && lastFocus.focus) lastFocus.focus();
   }
