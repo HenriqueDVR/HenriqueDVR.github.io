@@ -601,7 +601,6 @@
       0 0 70px -30px color-mix(in srgb, var(--hl, var(--steel)) 55%, transparent);
   }
   .media img, .media video { position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; display: block; }
-  .media .crop-top { transform: scale(1.07); transform-origin: 50% 85%; }   /* trims the editor toolbar off the top of the clip */
   .media-tag {
     position: absolute;
     left: 0.8rem;
@@ -670,30 +669,6 @@
     29% { opacity: 0; }
     100% { opacity: 0; }
   }
-
-  /* Into the Dark has no footage here yet: its systems, set as type */
-  .type-poster {
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    gap: 0.15rem;
-    padding: clamp(1.4rem, 4vw, 3rem);
-    background:
-      repeating-linear-gradient(to bottom, rgba(255, 169, 77, 0.05) 0 1px, transparent 1px 2.4rem),
-      radial-gradient(ellipse 80% 90% at 15% 20%, rgba(255, 169, 77, 0.15), transparent 70%),
-      #0a0b12;
-  }
-  .type-poster span {
-    font-family: var(--display);
-    font-weight: 800;
-    font-size: clamp(1.6rem, 3.4vw, 2.9rem);
-    line-height: 1.05;
-    letter-spacing: -0.02em;
-    text-transform: uppercase;
-    color: transparent;
-    -webkit-text-stroke: 1px rgba(255, 169, 77, 0.55);
-  }
-  .type-poster span:nth-child(2) { color: var(--ember); -webkit-text-stroke: 0; }
 
   /* ============ award badge ============ */
   .award {
@@ -1235,6 +1210,7 @@
           <img src="media/floppy-2.jpg" alt="Floppy Dungeon: blue ice spires on a frozen plain" width="1280" height="720" loading="lazy">
           <img src="media/floppy-3.jpg" alt="Floppy Dungeon: an eclipsed sun over the trees" width="1280" height="720" loading="lazy">
           <img src="media/floppy-4.jpg" alt="Close-up of the keep, showing that the picture is made of text characters" width="1280" height="720" loading="lazy">
+          <button class="media-play trailer" type="button" data-trailer="floppy" data-title="Floppy Dungeon: the eclipse, the ending's flight, two fights"><span>Watch it in motion</span></button>
           <figcaption class="media-tag">In-game screenshots</figcaption>
         </figure>
         <a class="award" href="https://x.com/2PGAMEARCADE/status/2111844205928804390" target="_blank" rel="noopener"
@@ -1294,9 +1270,9 @@
       </div>
       <div class="dig-media">
         <figure class="media">
-          <video class="crop-top" muted loop playsinline preload="none" poster="media/zd-patrol.jpg" data-loop="media/zd-patrol.mp4" aria-hidden="true"></video>
+          <video muted loop playsinline preload="none" poster="media/zd-montage.jpg" data-loop="media/zd-montage.mp4" aria-hidden="true"></video>
           <button class="media-play trailer" type="button" data-trailer="zeroday" data-title="Zero Day: Aftermath trailer"><span>Watch trailer</span></button>
-          <figcaption class="media-tag">Gameplay: an enemy on patrol</figcaption>
+          <figcaption class="media-tag">Gameplay: stealth, enemy states, VR</figcaption>
         </figure>
       </div>
     </article>
@@ -1330,11 +1306,10 @@
         </div>
       </div>
       <div class="dig-media">
-        <div class="media type-poster" aria-hidden="true">
-          <span>Procedural maps</span>
-          <span>Wave spawner</span>
-          <span>Shield blocking</span>
-        </div>
+        <figure class="media">
+          <video muted loop playsinline preload="none" poster="media/itd.jpg" data-loop="media/itd-loop.mp4" aria-hidden="true"></video>
+          <figcaption class="media-tag">Gameplay: goblins in the first cave</figcaption>
+        </figure>
       </div>
     </article>
 
@@ -1367,9 +1342,9 @@
       </div>
       <div class="dig-media">
         <figure class="media">
-          <img src="media/cave.jpg" alt="Into the Cave: the title over a cave level" width="1280" height="720" loading="lazy">
+          <video muted loop playsinline preload="none" poster="media/cave.jpg" data-loop="media/cave-loop.mp4" aria-hidden="true"></video>
           <button class="media-play trailer" type="button" data-trailer="intothecave" data-title="Into the Cave trailer"><span>Watch trailer</span></button>
-          <figcaption class="media-tag">Trailer</figcaption>
+          <figcaption class="media-tag">Two players, one puzzle</figcaption>
         </figure>
       </div>
     </article>
@@ -1539,7 +1514,7 @@
 var TRAILERS = {
   reel:        "media/reel.mp4",
   zeroday:     "y6sRvttsVG4",
-  floppy:      "",
+  floppy:      "media/floppy-cinematic.mp4",
   intothedark: "",
   intothecave: "IJR6IUp0WbA"
 };
@@ -1696,14 +1671,17 @@ var TRAILERS = {
 (function () {
   "use strict";
   var REEL = [
-    { t: 0,    key: "zeroday", title: "Zero Day: Aftermath", text: "Enemy AI that sees and hears you",             tech: "Unreal Engine 5 · C++" },
-    { t: 4.5,  key: "floppy",  title: "Floppy Dungeon",      text: "The whole game is one 1.44 MB exe",            tech: "C++ · Direct3D 11 · no engine" },
-    { t: 9.8,  key: "zeroday", title: "Zero Day: Aftermath", text: "Enemy states: patrol, suspicious, alert",      tech: "Unreal Engine 5 · C++" },
-    { t: 15.3, key: "glt",     title: "GLTPS1 Co-op",        text: "Online co-op: two players, one Kettenkrad",    tech: "Unity · C# · custom netcode" },
-    { t: 20.3, key: "zeroday", title: "Zero Day: Aftermath", text: "Reloading by hand in VR",                      tech: "Unreal Engine 5 · C++" },
-    { t: 24.8, key: "oc2vrm",  title: "OC2VRM",              text: "From a generated 3D character to a VRM avatar", tech: "Python · Blender" }
+    { t: 0,     key: "zeroday",     title: "Zero Day: Aftermath", text: "Enemy AI that sees and hears you",           tech: "Unreal Engine 5 · C++" },
+    { t: 4.6,   key: "floppy",     title: "Floppy Dungeon",      text: "A whole world in one 1.44 MB exe",           tech: "C++ · Direct3D 11 · no engine" },
+    { t: 13.5,  key: "intothedark", title: "Into the Dark",       text: "Procedural caves, a wave in every room",     tech: "Unreal Engine 5 · team of 3" },
+    { t: 20.75, key: "zeroday",     title: "Zero Day: Aftermath", text: "Enemy states: patrol, suspicious, alert",    tech: "Unreal Engine 5 · C++" },
+    { t: 26.25, key: "intothecave", title: "Into the Cave",       text: "Two players, two kinds of light",            tech: "Unity · C# · co-op on one keyboard" },
+    { t: 31.25, key: "zeroday",     title: "Zero Day: Aftermath", text: "Hiding from it in VR, then taking aim",      tech: "Unreal Engine 5 · C++" },
+    { t: 37.1,  key: "glt",         title: "GLTPS1 Co-op",        text: "Online co-op: two players, one Kettenkrad",  tech: "Unity · C# · custom netcode" },
+    { t: 41.6,  key: "oc2vrm",      title: "OC2VRM",              text: "From a static 3D model to a live VRM avatar", tech: "Python · Blender" }
   ];
-  var COLOR = { zeroday: "var(--violet)", floppy: "var(--sky)", glt: "var(--lumen)", oc2vrm: "var(--rose)" };
+  var COLOR = { zeroday: "var(--violet)", floppy: "var(--sky)", intothedark: "var(--ember)", intothecave: "var(--gold)",
+                glt: "var(--lumen)", oc2vrm: "var(--rose)" };
 
   var fig = document.querySelector(".reel");
   var video = document.getElementById("reel");
@@ -1736,7 +1714,7 @@ var TRAILERS = {
     return b;
   });
 
-  function length() { return video.duration && isFinite(video.duration) ? video.duration : 31.25; }
+  function length() { return video.duration && isFinite(video.duration) ? video.duration : 49.35; }
   function end(i) { return i + 1 < REEL.length ? REEL[i + 1].t : length(); }
   function sizeMarks() {
     for (var i = 0; i < REEL.length; i++) marks[i].style.setProperty("--d", (end(i) - REEL[i].t).toFixed(2));
